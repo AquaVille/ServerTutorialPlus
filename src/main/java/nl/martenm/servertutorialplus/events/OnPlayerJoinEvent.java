@@ -1,5 +1,6 @@
 package nl.martenm.servertutorialplus.events;
 
+import com.google.gson.JsonObject;
 import nl.martenm.servertutorialplus.ServerTutorialPlus;
 import nl.martenm.servertutorialplus.helpers.PluginUtils;
 import nl.martenm.servertutorialplus.managers.FlatFileManager;
@@ -10,7 +11,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.json.simple.JSONObject;
 
 /**
  * Player join event listener.
@@ -61,7 +61,7 @@ public class OnPlayerJoinEvent implements Listener{
         new BukkitRunnable(){
             @Override
             public void run() {
-                JSONObject object = FlatFileManager.getPlayerData(plugin, event.getPlayer().getUniqueId());
+                JsonObject object = FlatFileManager.getPlayerData(plugin, event.getPlayer().getUniqueId());
                 if(object == null){
                     this.cancel();
                     return;

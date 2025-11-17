@@ -19,6 +19,6 @@ public class Protocol_1_12 implements IProtocol {
 
     @Override
     public void playRedstoneParticle(Player player, Location location, Color color) {
-        player.spawnParticle(Particle.REDSTONE, location, 0, (double) color.getRed() / 255, (double) color.getGreen() / 255, (double) color.getBlue() / 255, 1);
+        player.spawnParticle(Particle.valueOf("REDSTONE"), location, 0, (double) color.getRed() / 255, (double) color.getGreen() / 255, (double) color.getBlue() / 255, 1);
     }
 }

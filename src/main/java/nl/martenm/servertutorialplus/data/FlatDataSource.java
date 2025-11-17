@@ -1,8 +1,9 @@
 package nl.martenm.servertutorialplus.data;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import nl.martenm.servertutorialplus.ServerTutorialPlus;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 import java.io.File;
 import java.io.FileReader;
@@ -30,14 +31,14 @@ public class FlatDataSource implements DataSource {
 
         File file = new File(plugin.getDataFolder() + "/data/playerdata/" + uuid + ".json");
         if(file.exists()){
-            JSONParser parser = new JSONParser();
-            JSONObject data = null;
+            JsonParser parser = new JsonParser();
+            JsonObject data = null;
             FileReader reader = null;
 
             try{
                 reader = new FileReader(file.getPath());
                 Object obj = parser.parse(reader);
-                data = (JSONObject) obj;
+                data = (JsonObject) obj;
             } catch (Exception ex){
                 ex.printStackTrace();
 
@@ -66,15 +67,15 @@ public class FlatDataSource implements DataSource {
         File hostlocation = new File(plugin.getDataFolder() + "/data/playerdata/");
         hostlocation.mkdirs();
 
-        JSONObject data = new JSONObject();
-        data.put("tutorials", played);
+        JsonObject data = new JsonObject();
+        data.add("tutorials", new Gson().toJsonTree(played));
 
         File file = new File(plugin.getDataFolder() + "/data/playerdata/" + uuid + ".json");
 
         FileWriter writer = null;
         try{
             writer = new FileWriter(file);
-            writer.write(data.toJSONString());
+            writer.write(data.getAsString());
         } catch (Exception ex){
             ex.printStackTrace();
             return false;
@@ -100,15 +101,15 @@ public class FlatDataSource implements DataSource {
         File hostlocation = new File(plugin.getDataFolder() + "/data/playerdata/");
         hostlocation.mkdirs();
 
-        JSONObject data = new JSONObject();
-        data.put("tutorials", played);
+        JsonObject data = new JsonObject();
+        data.add("tutorials", new Gson().toJsonTree(played));
 
         File file = new File(plugin.getDataFolder() + "/data/playerdata/" + uuid + ".json");
 
         FileWriter writer = null;
         try{
             writer = new FileWriter(file);
-            writer.write(data.toJSONString());
+            writer.write(data.getAsString());
         } catch (Exception ex){
             ex.printStackTrace();
             return false;

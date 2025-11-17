@@ -1,5 +1,6 @@
 package nl.martenm.servertutorialplus;
 
+import com.google.gson.JsonObject;
 import nl.martenm.servertutorialplus.api.ServerTutorialApi;
 import nl.martenm.servertutorialplus.commands.ServerTutorialRootCommand;
 import nl.martenm.servertutorialplus.data.DataSource;
@@ -32,7 +33,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.util.*;
@@ -144,7 +144,7 @@ public class ServerTutorialPlus extends JavaPlugin{
                 new BukkitRunnable(){
                     @Override
                     public void run() {
-                        JSONObject object = FlatFileManager.getPlayerData(instance, player.getUniqueId());
+                        JsonObject object = FlatFileManager.getPlayerData(instance, player.getUniqueId());
                         if(object == null){
                             this.cancel();
                             return;

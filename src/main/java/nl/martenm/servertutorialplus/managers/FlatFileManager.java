@@ -1,13 +1,13 @@
 package nl.martenm.servertutorialplus.managers;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import nl.martenm.servertutorialplus.ServerTutorialPlus;
 import nl.martenm.servertutorialplus.helpers.PluginUtils;
 import nl.martenm.servertutorialplus.helpers.dataholders.OldValuesPlayer;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 import java.io.File;
 import java.io.FileReader;
@@ -20,18 +20,18 @@ import java.util.UUID;
 @SuppressWarnings("ALL")
 public class FlatFileManager{
 
-    public static JSONObject getPlayerData(ServerTutorialPlus plugin, UUID uuid){
+    public static JsonObject getPlayerData(ServerTutorialPlus plugin, UUID uuid){
         File hostlocation = new File(plugin.getDataFolder() + "/playerdata");
         hostlocation.mkdirs();
 
         File file = new File(plugin.getDataFolder() + "/playerdata/" + uuid + ".json");
         if(file.exists()){
-            JSONParser parser = new JSONParser();
-            JSONObject data = null;
+            JsonParser parser = new JsonParser();
+            JsonObject data = null;
             try{
                 FileReader reader = new FileReader(file.getPath());
                 Object obj = parser.parse(reader);
-                data = (JSONObject) obj;
+                data = (JsonObject) obj;
                 reader.close();
             } catch (Exception ex){
                 ex.printStackTrace();
@@ -45,19 +45,19 @@ public class FlatFileManager{
         return null;
     }
 
-    public static void setPlayerData(ServerTutorialPlus plugin, Player player, JSONObject object){
+    public static void setPlayerData(ServerTutorialPlus plugin, Player player, JsonObject object){
         if(object == null) return;
         new BukkitRunnable(){
             @Override
             public void run() {
                 plugin.getLogger().info("Restoring player status for player: " + player.getName());
-                Double dd = (Double) object.get("walkspeed");
+                Double dd = (Double) object.get("walkspeed").getAsDouble();
                 player.setWalkSpeed(dd.floatValue());
-                player.setAllowFlight((Boolean) object.get("isAllowedFlight"));
-                player.setFlying((boolean) object.get("isFlying"));
-                Double ff = (Double) object.get("flyspeed");
+                player.setAllowFlight((Boolean) object.get("isAllowedFlight").getAsBoolean());
+                player.setFlying((boolean) object.get("isFlying").getAsBoolean());
+                Double ff = (Double) object.get("flyspeed").getAsDouble();
                 player.setFlySpeed(ff.floatValue());
-                player.teleport(PluginUtils.fromString(plugin, (String) object.get("location")));
+                player.teleport(PluginUtils.fromString(plugin, (String) object.get("location").getAsString()));
                 player.setGameMode(GameMode.valueOf(object.get("gamemode").toString()));
             }
         }.runTask(plugin);
@@ -76,20 +76,20 @@ public class FlatFileManager{
         File hostlocation = new File(plugin.getDataFolder() + "/playerdata");
         hostlocation.mkdirs();
 
-        JSONObject data = new JSONObject();
-        data.put("isFlying", info.getFlying());
-        data.put("isAllowedFlight", info.isAllowFlight());
-        data.put("flyspeed", info.getOriginal_flySpeed());
-        data.put("walkspeed", info.getOriginal_walkSpeed());
-        data.put("location", PluginUtils.fromLocation(info.getLoc()));
-        data.put("gamemode", info.getGamemode().toString());
+        JsonObject data = new JsonObject();
+        data.addProperty("isFlying", info.getFlying());
+        data.addProperty("isAllowedFlight", info.isAllowFlight());
+        data.addProperty("flyspeed", info.getOriginal_flySpeed());
+        data.addProperty("walkspeed", info.getOriginal_walkSpeed());
+        data.addProperty("location", PluginUtils.fromLocation(info.getLoc()));
+        data.addProperty("gamemode", info.getGamemode().toString());
 
         File file = new File(plugin.getDataFolder() + "/playerdata/" + info.getUuid() + ".json");
 
         FileWriter writer = null;
         try{
             writer = new FileWriter(file);
-            writer.write(data.toJSONString());
+            writer.write(data.getAsString());
             System.out.println("[Server Tutorial Plus] A player left while in the tutorial. Old data has been saved.");
         } catch (Exception ex){
             ex.printStackTrace();
