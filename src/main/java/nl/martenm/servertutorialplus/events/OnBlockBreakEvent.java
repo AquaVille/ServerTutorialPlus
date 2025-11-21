@@ -22,7 +22,7 @@ public class OnBlockBreakEvent implements Listener {
     public void onBlockBreakEvent(BlockBreakEvent event){
 
         for(TutorialSign ts : plugin.tutorialSigns){
-            if(ts.block.getLocation().equals(event.getBlock().getLocation())){
+            if(ts.getBlock().getLocation().equals(event.getBlock().getLocation())){
                 if(!event.getPlayer().hasPermission("servertutorial.action.removeblock")){
                     event.getPlayer().sendMessage(Lang.EVENT_BLOCK_REMOVE_PERMISSION.toString());
                     event.setCancelled(true);

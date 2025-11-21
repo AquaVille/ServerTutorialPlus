@@ -1,6 +1,10 @@
 package nl.martenm.servertutorialplus;
 
-import com.google.gson.JsonObject;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import lombok.Getter;
+import nl.martenm.servertutorialplus.adapters.GamemodeAdapter;
+import nl.martenm.servertutorialplus.adapters.LocationAdapter;
 import nl.martenm.servertutorialplus.api.ServerTutorialApi;
 import nl.martenm.servertutorialplus.commands.ServerTutorialRootCommand;
 import nl.martenm.servertutorialplus.data.DataSource;
@@ -10,6 +14,7 @@ import nl.martenm.servertutorialplus.events.*;
 import nl.martenm.servertutorialplus.helpers.Config;
 import nl.martenm.servertutorialplus.helpers.PluginUtils;
 import nl.martenm.servertutorialplus.api.hooks.PlaceholderAPIExpansion;
+import nl.martenm.servertutorialplus.helpers.dataholders.PlayerData;
 import nl.martenm.servertutorialplus.language.Lang;
 import nl.martenm.servertutorialplus.managers.FlatFileManager;
 import nl.martenm.servertutorialplus.managers.NPCManager;
@@ -28,6 +33,8 @@ import nl.martenm.servertutorialplus.reflection.v1_14.Protocol_1_14_V1;
 import nl.martenm.simplecommands.SimpleCommandMessages;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -55,6 +62,7 @@ public class ServerTutorialPlus extends JavaPlugin{
     public HashMap<UUID, TutorialController> inTutorial;
     public HashMap<UUID, TutorialEntitySelector> selectingNpc;
 
+    @Getter
     private IProtocol protocol;
 
     public Config tutorialSaves;
@@ -64,21 +72,28 @@ public class ServerTutorialPlus extends JavaPlugin{
     public boolean enabled;
     public boolean placeholderAPI;
 
+    @Getter
     private DataSource dataSource;
-
+    @Getter
     private ClickManager clickManager;
+    @Getter
     private NPCManager npcManager;
-
+    @Getter
     private Metrics metrics;
+    @Getter
+    private static Gson gson;
 
+    @Getter
     private static ServerTutorialPlus instance;
-
-    public static ServerTutorialPlus getInstance() {
-        return instance;
-    }
 
     public void onEnable(){
         instance = this;
+
+        // Setup GSON
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Location.class, new LocationAdapter());
+        gsonBuilder.registerTypeAdapter(GameMode.ADVENTURE.getDeclaringClass(), new GamemodeAdapter());
+        gson = gsonBuilder.create();
 
         logger = getLogger();
         logger.info("Enabling server tutorial...");
@@ -131,7 +146,7 @@ public class ServerTutorialPlus extends JavaPlugin{
             placeholderAPI = false;
         }
 
-        if(getServer().getOnlinePlayers().size() > 0){
+        if(!getServer().getOnlinePlayers().isEmpty()){
             for(int i = 0; i < 2; i++){
                 logger.warning("");
             }
@@ -144,7 +159,7 @@ public class ServerTutorialPlus extends JavaPlugin{
                 new BukkitRunnable(){
                     @Override
                     public void run() {
-                        JsonObject object = FlatFileManager.getPlayerData(instance, player.getUniqueId());
+                        PlayerData object = FlatFileManager.getPlayerData(instance, player.getUniqueId());
                         if(object == null){
                             this.cancel();
                             return;
@@ -171,7 +186,7 @@ public class ServerTutorialPlus extends JavaPlugin{
         for(TutorialController tc : inTutorial.values()){
             tc.cancel(true);
             tc.getOldValuesPlayer().restore(tc.getPlayer());
-            //FlatFileManager.saveJson(this, tc.getOldValuesPlayer());
+            FlatFileManager.saveJson(this, tc.getOldValuesPlayer());
         }
         inTutorial.clear();
 
@@ -324,14 +339,10 @@ public class ServerTutorialPlus extends JavaPlugin{
         signSaves.set("signs", null);
         for(int i = 0; i < tutorialSigns.size(); i++){
             TutorialSign ts = tutorialSigns.get(i);
-            signSaves.set("signs." + i + ".location", PluginUtils.fromLocation(ts.block.getLocation()));
-            signSaves.set("signs." + i + ".servertutorialplus", ts.ServerTutorialId);
+            signSaves.set("signs." + i + ".location", PluginUtils.fromLocation(ts.getBlock().getLocation()));
+            signSaves.set("signs." + i + ".servertutorialplus", ts.getServerTutorialId());
         }
         signSaves.save();
-    }
-
-    public NPCManager getNpcManager() {
-        return npcManager;
     }
 
     private void createLanguageFiles(){
@@ -339,7 +350,7 @@ public class ServerTutorialPlus extends JavaPlugin{
         File folder = new File(getDataFolder() + "/language");
         folder.mkdirs();
 
-        if(folder.listFiles().length == 0){
+        if (folder.listFiles().length == 0){
             // Create default language files
         }
 
@@ -357,14 +368,6 @@ public class ServerTutorialPlus extends JavaPlugin{
 
     public ServerTutorialApi getApi(){
         return new ServerTutorialApi(this);
-    }
-
-    public DataSource getDataSource() {
-        return dataSource;
-    }
-
-    public ClickManager getClickManager() {
-        return clickManager;
     }
 
     public void setupProtocol() {
@@ -392,7 +395,4 @@ public class ServerTutorialPlus extends JavaPlugin{
         getLogger().info("Using protocol: " + protocol.getClass().getName());
     }
 
-    public IProtocol getProtocol() {
-        return protocol;
-    }
 }

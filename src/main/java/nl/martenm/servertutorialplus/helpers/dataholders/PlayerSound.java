@@ -1,5 +1,6 @@
 package nl.martenm.servertutorialplus.helpers.dataholders;
 
+import lombok.Getter;
 import org.bukkit.Sound;
 
 /**
@@ -13,8 +14,13 @@ public class PlayerSound {
         this.volume = volume;
     }
 
-    public Sound sound;
-    public float pitch;
-    public float volume;
+    @Getter
+    private Sound sound;
+
+    @Getter
+    private float pitch;
+
+    @Getter
+    private float volume;
 
 }

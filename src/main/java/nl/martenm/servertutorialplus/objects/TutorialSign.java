@@ -1,5 +1,7 @@
 package nl.martenm.servertutorialplus.objects;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.block.Block;
 
 /**
@@ -8,8 +10,12 @@ import org.bukkit.block.Block;
  */
 public class TutorialSign {
 
-    public Block block;
-    public String ServerTutorialId;
+    @Getter
+    @Setter
+    private Block block;
+    @Getter
+    @Setter
+    private String ServerTutorialId;
 
     public TutorialSign(Block block, String serverTutorialId){
         this.block = block;

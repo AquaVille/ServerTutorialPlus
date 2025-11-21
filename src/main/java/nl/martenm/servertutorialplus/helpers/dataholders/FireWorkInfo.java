@@ -1,5 +1,6 @@
 package nl.martenm.servertutorialplus.helpers.dataholders;
 
+import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.inventory.meta.FireworkMeta;
 
@@ -8,19 +9,13 @@ import org.bukkit.inventory.meta.FireworkMeta;
  */
 public class FireWorkInfo {
 
-    private Location location;
+    @Getter
+    private final Location location;
+    @Getter
     private FireworkMeta fireworkMeta;
 
     public FireWorkInfo(Location location, FireworkMeta fireworkMeta){
         this.fireworkMeta = fireworkMeta;
         this.location = location;
-    }
-
-    public Location getLoc() {
-        return location;
-    }
-
-    public FireworkMeta getFireworkMeta() {
-        return fireworkMeta;
     }
 }

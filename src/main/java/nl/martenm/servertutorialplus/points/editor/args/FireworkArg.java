@@ -51,9 +51,9 @@ public class FireworkArg extends PointArg {
                 double distance = 1000;
 
                 for(FireWorkInfo info : point.getFireworks()){
-                    if(info.getLoc().distance(player.getLocation()) < distance){
+                    if(info.getLocation().distance(player.getLocation()) < distance){
                         fw = info;
-                        distance = info.getLoc().distance(player.getLocation());
+                        distance = info.getLocation().distance(player.getLocation());
                     }
                 }
 

@@ -1,5 +1,6 @@
 package nl.martenm.servertutorialplus.objects;
 
+import lombok.Getter;
 import nl.martenm.servertutorialplus.ServerTutorialPlus;
 import nl.martenm.servertutorialplus.language.Lang;
 import org.bukkit.entity.*;
@@ -11,26 +12,17 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
  */
 public class TutorialEntitySelector {
 
+    @Getter
     private Player player;
+    @Getter
     private String npcId;
+    @Getter
     private ServerTutorial tutorial;
 
     public TutorialEntitySelector(Player player, ServerTutorial tutorial, String npcId){
         this.player = player;
         this.npcId = npcId;
         this.tutorial = tutorial;
-    }
-
-    public Player getPlayer() {
-        return player;
-    }
-
-    public String getNpcId() {
-        return npcId;
-    }
-
-    public ServerTutorial getTutorial() {
-        return tutorial;
     }
 
     public void create(ServerTutorialPlus plugin, PlayerInteractEntityEvent event){

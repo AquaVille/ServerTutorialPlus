@@ -1,29 +1,42 @@
 package nl.martenm.servertutorialplus.helpers.dataholders;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Created by Marten on 5-3-2017.
  */
 public class PlayerTitle {
 
     public PlayerTitle(String title, String subtitle, int fadeIn, int time, int fadeOut){
-        this.title = title;
-        this.subtitle = subtitle;
-        this.time = time;
-        this.fadeIn = fadeIn;
-        this.fadeOut = fadeOut;
+        this.setTitle(title);
+        this.setSubtitle(subtitle);
+        this.setTime(time);
+        this.setFadeIn(fadeIn);
+        this.setFadeOut(fadeOut);
     }
 
     public PlayerTitle(){
-        this.title = "";
-        this.subtitle = "";
-        this.fadeIn = 20;
-        this.fadeOut = 20;
-        this.time = 40;
+        this.setTitle("");
+        this.setSubtitle("");
+        this.setFadeIn(20);
+        this.setFadeOut(20);
+        this.setTime(40);
     }
 
-    public String title;
-    public String subtitle;
-    public int time;
-    public int fadeIn;
-    public int fadeOut;
+    @Getter
+    @Setter
+    private String title;
+    @Getter
+    @Setter
+    private String subtitle;
+    @Getter
+    @Setter
+    private int time;
+    @Getter
+    @Setter
+    private int fadeIn;
+    @Getter
+    @Setter
+    private int fadeOut;
 }

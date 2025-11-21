@@ -2,7 +2,7 @@ package nl.martenm.servertutorialplus.commands.sub.points;
 
 import nl.martenm.servertutorialplus.ServerTutorialPlus;
 import nl.martenm.servertutorialplus.helpers.PluginUtils;
-import nl.martenm.servertutorialplus.helpers.dataholders.OldValuesPlayer;
+import nl.martenm.servertutorialplus.helpers.dataholders.PlayerData;
 import nl.martenm.servertutorialplus.language.Lang;
 import nl.martenm.servertutorialplus.objects.ServerTutorial;
 import nl.martenm.servertutorialplus.points.IPlayPoint;
@@ -67,16 +67,16 @@ public class PlayPointCommand extends SimpleCommand {
             }
         }.runTaskLater(plugin, (long) serverTutorial.points.get(index - 1).getTime() * 20 + 6);
 
-        OldValuesPlayer oldValuesPlayer = new OldValuesPlayer(player);
+        PlayerData playerData = new PlayerData(player);
 
         IPointCallBack callBack = () -> {
             plugin.lockedPlayers.remove(player.getUniqueId());
             plugin.lockedViews.remove(player.getUniqueId());
-            player.setFlySpeed(oldValuesPlayer.getOriginal_flySpeed());
-            player.setWalkSpeed(oldValuesPlayer.getOriginal_walkSpeed());
-            player.setFlying(oldValuesPlayer.getFlying());
+            player.setFlySpeed(playerData.getFlyspeed());
+            player.setWalkSpeed(playerData.getWalkspeed());
+            player.setFlying(playerData.isFlying());
         };
-        IPlayPoint handler = serverTutorial.points.get(index - 1).createPlay(player, oldValuesPlayer, callBack);
+        IPlayPoint handler = serverTutorial.points.get(index - 1).createPlay(player, playerData, callBack);
         handler.start();
         return true;
     }

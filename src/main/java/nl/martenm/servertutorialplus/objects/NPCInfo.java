@@ -1,5 +1,7 @@
 package nl.martenm.servertutorialplus.objects;
 
+import lombok.Getter;
+import lombok.Setter;
 import nl.martenm.servertutorialplus.ServerTutorialPlus;
 import nl.martenm.servertutorialplus.helpers.SpigotUtils;
 import org.bukkit.Location;
@@ -15,12 +17,18 @@ public class NPCInfo {
 
     private ServerTutorialPlus plugin;
 
+    @Getter
     private String id;
 
+    @Getter
     private UUID npcId;
+    @Setter
+    @Getter
     private UUID[] armorstandIDs;
+    @Getter
     private String serverTutorialID;
 
+    @Getter
     private Location location;
 
     public NPCInfo(ServerTutorialPlus plugin, String id, UUID npcId, UUID[] armorstandIDs, String serverTutorialID){
@@ -48,27 +56,4 @@ public class NPCInfo {
         this.location = location;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public UUID getNpcId() {
-        return npcId;
-    }
-
-    public UUID[] getArmorstandIDs() {
-        return armorstandIDs;
-    }
-
-    public void setArmorstandIDs(UUID[] armorstandIDs) {
-        this.armorstandIDs = armorstandIDs;
-    }
-
-    public String getServerTutorialID() {
-        return serverTutorialID;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
 }

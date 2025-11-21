@@ -42,14 +42,14 @@ public class OnPlayerInteractEvent implements Listener{
         }
 
         for(TutorialSign ts : plugin.tutorialSigns){
-            if(!ts.block.equals(event.getClickedBlock())){
+            if(!ts.getBlock().equals(event.getClickedBlock())){
                 continue;
             }
-            ServerTutorial serverTutorial = PluginUtils.getTutorial(plugin, ts.ServerTutorialId);
+            ServerTutorial serverTutorial = PluginUtils.getTutorial(plugin, ts.getServerTutorialId());
 
             if(serverTutorial == null){
                 // Just in here to fix stuff but PluginUtils... Whyyyyyy ;-;
-                event.getPlayer().sendMessage(Lang.ERROR_FAILED_FINDING_TUTORIAL_ADMIN.toString().replace("%id%", ts.ServerTutorialId));
+                event.getPlayer().sendMessage(Lang.ERROR_FAILED_FINDING_TUTORIAL_ADMIN.toString().replace("%id%", ts.getServerTutorialId()));
                 return;
             }
 

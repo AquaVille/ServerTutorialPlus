@@ -5,7 +5,7 @@ import nl.martenm.servertutorialplus.ServerTutorialPlus;
 import nl.martenm.servertutorialplus.helpers.Config;
 import nl.martenm.servertutorialplus.helpers.PluginUtils;
 import nl.martenm.servertutorialplus.helpers.dataholders.FireWorkInfo;
-import nl.martenm.servertutorialplus.helpers.dataholders.OldValuesPlayer;
+import nl.martenm.servertutorialplus.helpers.dataholders.PlayerData;
 import nl.martenm.servertutorialplus.helpers.dataholders.PlayerSound;
 import nl.martenm.servertutorialplus.helpers.dataholders.PlayerTitle;
 import net.md_5.bungee.api.ChatMessageType;
@@ -66,17 +66,17 @@ public abstract class ServerTutorialPoint{
     /**
      * The method create the playable point.
      * @param player The targeted player.
-     * @param oldValuesPlayer Old values of the player before starting the tutorial / point.
+     * @param playerData Old values of the player before starting the tutorial / point.
      * @param callBack The callback to the controller used to complete the point.
      */
-    public IPlayPoint createPlay(Player player, OldValuesPlayer oldValuesPlayer, IPointCallBack callBack){
+    public IPlayPoint createPlay(Player player, PlayerData playerData, IPointCallBack callBack){
         return new IPlayPoint() {
 
             BukkitTask timerTask = null;
 
             @Override
             public void start() {
-                playDefault(player, oldValuesPlayer, true);
+                playDefault(player, playerData, true);
 
                 timerTask = new BukkitRunnable() {
                     @Override
@@ -97,9 +97,9 @@ public abstract class ServerTutorialPoint{
      * The very basic logic of a point that should be applied to every point.
      * This includes for example, lockplayer, lockview, time, titles, sounds, etc...
      * @param player The targeted player.
-     * @param oldValuesPlayer Old values of the player before starting the tutorial / point.
+     * @param playerData Old values of the player before starting the tutorial / point.
      */
-    protected void playDefault(Player player, OldValuesPlayer oldValuesPlayer, boolean teleport) {
+    protected void playDefault(Player player, PlayerData playerData, boolean teleport) {
         if(teleport) player.teleport(loc);
 
         for (String message : message_chat) {
@@ -117,8 +117,8 @@ public abstract class ServerTutorialPoint{
         } else {
             if (plugin.lockedPlayers.contains(player.getUniqueId())) {
                 plugin.lockedPlayers.remove(player.getUniqueId());
-                player.setFlySpeed(oldValuesPlayer.getOriginal_flySpeed());
-                player.setWalkSpeed(oldValuesPlayer.getOriginal_walkSpeed());
+                player.setFlySpeed(playerData.getFlyspeed());
+                player.setWalkSpeed(playerData.getWalkspeed());
             }
         }
         //endregion
@@ -145,7 +145,7 @@ public abstract class ServerTutorialPoint{
         } else{
             if(player.isFlying()){
                 player.setFlying(false);
-                player.setAllowFlight(oldValuesPlayer.isAllowFlight());
+                player.setAllowFlight(playerData.isAllowedFlight());
             }
         }
         //endregion
@@ -166,7 +166,7 @@ public abstract class ServerTutorialPoint{
         //region fireworks
         if(fireworks != null){
             for(FireWorkInfo fireWorkInfo : fireworks){
-                Firework firework = (Firework) player.getWorld().spawnEntity(fireWorkInfo.getLoc(), EntityType.FIREWORK_ROCKET);
+                Firework firework = (Firework) player.getWorld().spawnEntity(fireWorkInfo.getLocation(), EntityType.FIREWORK_ROCKET);
                 firework.setFireworkMeta(fireWorkInfo.getFireworkMeta());
             }
         }
@@ -181,12 +181,12 @@ public abstract class ServerTutorialPoint{
         //endregion
 
         if (titleInfo != null) {
-            Titles.sendTitle(player, titleInfo.fadeIn, titleInfo.time, titleInfo.fadeOut, PluginUtils.replaceVariables(plugin.placeholderAPI, player, titleInfo.title), PluginUtils.replaceVariables(plugin.placeholderAPI, player,titleInfo.subtitle));
+            Titles.sendTitle(player, titleInfo.getFadeIn(), titleInfo.getTime(), titleInfo.getFadeOut(), PluginUtils.replaceVariables(plugin.placeholderAPI, player, titleInfo.getTitle()), PluginUtils.replaceVariables(plugin.placeholderAPI, player, titleInfo.getSubtitle()));
         }
 
         if (soundInfo != null) {
             // loc, sound, volume, pitch <-- I forget that all the damm time.
-            player.playSound(player.getLocation(), soundInfo.sound, soundInfo.volume, soundInfo.pitch);
+            player.playSound(player.getLocation(), soundInfo.getSound(), soundInfo.getVolume(), soundInfo.getPitch());
         }
     }
 
@@ -268,23 +268,23 @@ public abstract class ServerTutorialPoint{
         if(flying) tutorialSaves.set("tutorials." + key + ".points." + i + ".setFly", flying);
 
         if(titleInfo != null){
-            tutorialSaves.set("tutorials." + key + ".points." + i + ".title.title", titleInfo.title);
-            tutorialSaves.set("tutorials." + key + ".points." + i + ".title.subtitle", titleInfo.subtitle);
-            tutorialSaves.set("tutorials." + key + ".points." + i + ".title.fade-in", titleInfo.fadeIn);
-            tutorialSaves.set("tutorials." + key + ".points." + i + ".title.stay", titleInfo.time);
-            tutorialSaves.set("tutorials." + key + ".points." + i + ".title.fade-out", titleInfo.fadeOut);
+            tutorialSaves.set("tutorials." + key + ".points." + i + ".title.title", titleInfo.getTitle());
+            tutorialSaves.set("tutorials." + key + ".points." + i + ".title.subtitle", titleInfo.getSubtitle());
+            tutorialSaves.set("tutorials." + key + ".points." + i + ".title.fade-in", titleInfo.getFadeIn());
+            tutorialSaves.set("tutorials." + key + ".points." + i + ".title.stay", titleInfo.getTime());
+            tutorialSaves.set("tutorials." + key + ".points." + i + ".title.fade-out", titleInfo.getFadeOut());
         }
 
         if(soundInfo != null){
-            tutorialSaves.set("tutorials." + key + ".points." + i + ".sound.sound", soundInfo.sound.name());
-            tutorialSaves.set("tutorials." + key + ".points." + i + ".sound.pitch", soundInfo.pitch);
-            tutorialSaves.set("tutorials." + key + ".points." + i + ".sound.volume", soundInfo.volume);
+            tutorialSaves.set("tutorials." + key + ".points." + i + ".sound.sound", soundInfo.getSound().name());
+            tutorialSaves.set("tutorials." + key + ".points." + i + ".sound.pitch", soundInfo.getPitch());
+            tutorialSaves.set("tutorials." + key + ".points." + i + ".sound.volume", soundInfo.getVolume());
         }
 
         if(fireworks != null){
             for(int fire = 0; fire < fireworks.size(); fire++ ){
                 FireWorkInfo info = fireworks.get(fire);
-                tutorialSaves.set("tutorials." + key + ".points." + i + ".fireworks."+ fire + ".location", PluginUtils.fromLocation(info.getLoc()));
+                tutorialSaves.set("tutorials." + key + ".points." + i + ".fireworks."+ fire + ".location", PluginUtils.fromLocation(info.getLocation()));
                 tutorialSaves.set("tutorials." + key + ".points." + i + ".fireworks."+ fire + ".meta", info.getFireworkMeta());
             }
         }

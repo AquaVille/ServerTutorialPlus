@@ -1,7 +1,7 @@
 package nl.martenm.servertutorialplus.events;
 
 import nl.martenm.servertutorialplus.ServerTutorialPlus;
-import nl.martenm.servertutorialplus.helpers.dataholders.OldValuesPlayer;
+import nl.martenm.servertutorialplus.helpers.dataholders.PlayerData;
 import nl.martenm.servertutorialplus.objects.TutorialController;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,8 +25,8 @@ public class OnPlayerQuitEvent implements Listener {
             TutorialController tc = plugin.inTutorial.get(event.getPlayer().getUniqueId());
             tc.cancel(true);
 
-            OldValuesPlayer oldValuesPlayer = tc.getOldValuesPlayer();
-            oldValuesPlayer.restore(event.getPlayer());
+            PlayerData playerData = tc.getOldValuesPlayer();
+            playerData.restore(event.getPlayer());
         }
     }
 }

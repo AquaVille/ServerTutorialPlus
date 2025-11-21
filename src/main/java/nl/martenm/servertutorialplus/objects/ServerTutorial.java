@@ -1,5 +1,7 @@
 package nl.martenm.servertutorialplus.objects;
 
+import lombok.Getter;
+import lombok.Setter;
 import nl.martenm.servertutorialplus.points.ServerTutorialPoint;
 
 import java.util.ArrayList;
@@ -35,6 +37,18 @@ public class ServerTutorial {
     }
 
 
+    /**
+     * -- GETTER --
+     *  The unique id of the server tutorial.
+     *
+     *
+     * -- SETTER --
+     *  Sets the unique id of a server tutorial.
+     *  USE WITH CAUTION!
+     *
+     */
+    @Setter
+    @Getter
     private String id;
 
     /**
@@ -44,8 +58,14 @@ public class ServerTutorial {
 
     public boolean invisiblePlayer;
 
+    /**
+     * -- SETTER --
+     *  Set whether this servertutorial blocks commands from the player.
+     */
+    @Setter
     private boolean blocksCommands;
 
+    @Getter
     private List<String> commandWhiteList;
 
     /**
@@ -56,38 +76,23 @@ public class ServerTutorial {
     /**
      * List of rewards that are given when the tutorial is completed for the first time.
      */
+    @Getter
     private List<String> rewards;
 
     /**
      * If the user should have the permission 'servertutorialplus.tutorial.ID to play this tutorial.
+     * -- SETTER --
+     *  Sets if you need permission to play this tutorial.
+     *
+
      */
+    @Setter
     private boolean needsPermission;
 
     /**
      * If set to true the incoming chat messages to the player will be blocked.
      */
     private boolean blockChat;
-
-    /**
-    * The unique id of the server tutorial.
-    * @return id
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-    * Sets the unique id of a server tutorial.
-    * USE WITH CAUTION!
-     * @param id The new ID.
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public List<String> getRewards() {
-        return rewards;
-    }
 
     public void setRewards(List<String> rewards) {
         if(rewards == null) this.rewards = new ArrayList<>();
@@ -104,30 +109,11 @@ public class ServerTutorial {
     }
 
     /**
-     * Sets if you need permission to play this tutorial.
-     * @param needsPermission true means permission is needed.
-     */
-    public void setNeedsPermission(boolean needsPermission) {
-        this.needsPermission = needsPermission;
-    }
-
-    /**
      * Get whether this tutorial blocks commands by other plugins and Bukkit/Spigot it self.
      * @return true if blocks commands
      */
     public boolean isBlockingCommands() {
         return blocksCommands;
-    }
-
-    /**
-     * Set whether this servertutorial blocks commands from the player.
-     */
-    public void setBlocksCommands(boolean blocksCommands) {
-        this.blocksCommands = blocksCommands;
-    }
-
-    public List<String> getCommandWhiteList() {
-        return commandWhiteList;
     }
 
     public void setCommandWhiteList(List<String> commandWhiteList) {
@@ -136,7 +122,7 @@ public class ServerTutorial {
     }
 
     /**
-     * Wheter the player is receiving chat messages or not while in the tutorial.
+     * Whether the player is receiving chat messages or not while in the tutorial.
      */
     public boolean isChatBlocked() {
         return blockChat;

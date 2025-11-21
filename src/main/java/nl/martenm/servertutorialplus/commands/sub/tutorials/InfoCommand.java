@@ -84,8 +84,8 @@ public class InfoCommand extends SimpleCommand {
             if(point.getMessage_actionBar() != null && !point.getMessage_actionBar().equalsIgnoreCase("")) sender.sendMessage("     " + ChatColor.GREEN + "Actionbar: " + ChatColor.YELLOW + point.getMessage_actionBar());
             //Title
             if(point.getTitleInfo() != null){
-                if(!point.getTitleInfo().title.equalsIgnoreCase("")) sender.sendMessage("     " + ChatColor.GREEN + "Title: " + ChatColor.YELLOW + ChatColor.translateAlternateColorCodes('&', point.getTitleInfo().title));
-                if(!point.getTitleInfo().subtitle.equalsIgnoreCase("")) sender.sendMessage("     " + ChatColor.GREEN + "Sub Title: " + ChatColor.YELLOW + ChatColor.translateAlternateColorCodes('&', point.getTitleInfo().subtitle));
+                if(!point.getTitleInfo().getTitle().equalsIgnoreCase("")) sender.sendMessage("     " + ChatColor.GREEN + "Title: " + ChatColor.YELLOW + ChatColor.translateAlternateColorCodes('&', point.getTitleInfo().getTitle()));
+                if(!point.getTitleInfo().getSubtitle().equalsIgnoreCase("")) sender.sendMessage("     " + ChatColor.GREEN + "Sub Title: " + ChatColor.YELLOW + ChatColor.translateAlternateColorCodes('&', point.getTitleInfo().getSubtitle()));
             }
 
             if(point.getMessage_chat() != null){

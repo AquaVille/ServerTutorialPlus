@@ -1,5 +1,8 @@
 package nl.martenm.servertutorialplus.helpers;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Simple colour class for particle colours.
  * @author MartenM
@@ -7,8 +10,13 @@ package nl.martenm.servertutorialplus.helpers;
  */
 
 public class Color{
+    @Getter
     private int red;
+    @Setter
+    @Getter
     private int green;
+    @Setter
+    @Getter
     private int blue;
 
     public Color(int red, int green, int blue){
@@ -20,30 +28,10 @@ public class Color{
         this.blue = blue;
     }
 
-    public int getRed() {
-        return red;
-    }
-
     public void setRed(int red) {
         if(red == 0){
             this.red = 1;
         } else this.red = red;
-    }
-
-    public int getGreen() {
-        return green;
-    }
-
-    public void setGreen(int green) {
-        this.green = green;
-    }
-
-    public int getBlue() {
-        return blue;
-    }
-
-    public void setBlue(int blue) {
-        this.blue = blue;
     }
 
     public void set(int red, int green, int blue){

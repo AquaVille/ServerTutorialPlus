@@ -6,7 +6,7 @@ import nl.martenm.servertutorialplus.api.events.TutorialEndEvent;
 import nl.martenm.servertutorialplus.api.events.TutorialStartEvent;
 import nl.martenm.servertutorialplus.helpers.Messages;
 import nl.martenm.servertutorialplus.helpers.PluginUtils;
-import nl.martenm.servertutorialplus.helpers.dataholders.OldValuesPlayer;
+import nl.martenm.servertutorialplus.helpers.dataholders.PlayerData;
 import nl.martenm.servertutorialplus.points.IPlayPoint;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -28,13 +28,13 @@ public class TutorialController {
     private int current = 0;
     private IPlayPoint playedPoint;
 
-    private OldValuesPlayer oldValuesPlayer;
+    private PlayerData playerData;
 
     public TutorialController(ServerTutorialPlus plugin, Player player, ServerTutorial serverTutorial){
         this.plugin = plugin;
         this.player = player;
         this.serverTutorial = serverTutorial;
-        this.oldValuesPlayer = new OldValuesPlayer(player);
+        this.playerData = new PlayerData(player);
     }
 
     /**
@@ -74,7 +74,7 @@ public class TutorialController {
         plugin.inTutorial.put(player.getUniqueId(), this);
         serverTutorial.plays += 1;
 
-        playedPoint = serverTutorial.points.get(current).createPlay(player, oldValuesPlayer, this::finishPoint);
+        playedPoint = serverTutorial.points.get(current).createPlay(player, playerData, this::finishPoint);
         playedPoint.start();
     }
 
@@ -97,13 +97,13 @@ public class TutorialController {
     private void restorePlayer(boolean originalLocation){
         if(plugin.enabled) {
             // plugin.getServer().getScheduler().runTask(plugin, () -> {
-                player.setFlySpeed(oldValuesPlayer.getOriginal_flySpeed());
-                player.setWalkSpeed(oldValuesPlayer.getOriginal_walkSpeed());
-                player.setAllowFlight(oldValuesPlayer.isAllowFlight());
-                player.setFlying(oldValuesPlayer.getFlying());
-                player.setGameMode(oldValuesPlayer.getGamemode());
+                player.setFlySpeed(playerData.getFlyspeed());
+                player.setWalkSpeed(playerData.getWalkspeed());
+                player.setAllowFlight(playerData.isAllowedFlight());
+                player.setFlying(playerData.isFlying());
+                player.setGameMode(playerData.getGamemode());
                 if (originalLocation) {
-                    player.teleport(oldValuesPlayer.getLoc());
+                    player.teleport(playerData.getLocation());
                 }
             // });
         }
@@ -138,7 +138,7 @@ public class TutorialController {
             finish();
         } else{
             current++;
-            playedPoint = serverTutorial.points.get(current).createPlay(player, oldValuesPlayer, this::finishPoint);
+            playedPoint = serverTutorial.points.get(current).createPlay(player, playerData, this::finishPoint);
             playedPoint.start();
         }
     }
@@ -198,8 +198,8 @@ public class TutorialController {
     * Gets the old values for a player, used to restore the players state before starting the tutorial.
     * @return Old values of a player.
      */
-    public OldValuesPlayer getOldValuesPlayer(){
-        return oldValuesPlayer;
+    public PlayerData getOldValuesPlayer(){
+        return playerData;
     }
 
     /**

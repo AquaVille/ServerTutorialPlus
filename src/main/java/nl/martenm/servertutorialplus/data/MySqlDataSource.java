@@ -28,7 +28,7 @@ public class MySqlDataSource implements DataSource {
     }
 
 
-    public boolean setup() {
+    public void setup() {
         String host = plugin.getConfig().getString("datasource.mysql.host");
         String database = plugin.getConfig().getString("datasource.mysql.database");
         int port = plugin.getConfig().getInt("datasource.mysql.port");
@@ -46,47 +46,22 @@ public class MySqlDataSource implements DataSource {
         mySql = new HikariDataSource(config);
 
         plugin.getLogger().info("Creating Tutorial_Players table.");
-        if(!simpleSqlUpdate("CREATE TABLE IF NOT EXISTS Tutorial_Players " +
+        simpleSqlUpdate("CREATE TABLE IF NOT EXISTS Tutorial_Players " +
                 "(uuid VARCHAR(64) not NULL, " +
                 " tutorial VARCHAR(255), " +
-                " PRIMARY KEY ( uuid, tutorial))" )){
-            return false;
-        }
+                " PRIMARY KEY ( uuid, tutorial))");
 
-        return true;
     }
 
     public boolean simpleSqlUpdate(String sql)
     {
-        Connection connection = null;
-        Statement statement = null;
 
-        try{
-            connection = mySql.getConnection();
-
-            statement = connection.createStatement();
+        try (Connection connection = mySql.getConnection(); Statement statement = connection.createStatement()) {
             statement.executeUpdate(sql);
-
-        } catch (Exception ex){
+        } catch (Exception ex) {
             plugin.getLogger().warning("[!!!] Error while performing an SQL query!");
             ex.printStackTrace();
             return false;
-        } finally {
-            if(connection != null){
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            if(statement != null){
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
         }
         return true;
     }

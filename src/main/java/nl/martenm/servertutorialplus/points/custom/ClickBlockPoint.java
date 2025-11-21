@@ -5,7 +5,7 @@ import nl.martenm.servertutorialplus.ServerTutorialPlus;
 import nl.martenm.servertutorialplus.helpers.Color;
 import nl.martenm.servertutorialplus.helpers.Config;
 import nl.martenm.servertutorialplus.helpers.PluginUtils;
-import nl.martenm.servertutorialplus.helpers.dataholders.OldValuesPlayer;
+import nl.martenm.servertutorialplus.helpers.dataholders.PlayerData;
 import nl.martenm.servertutorialplus.managers.clickactions.IClickAction;
 import nl.martenm.servertutorialplus.objects.ServerTutorial;
 import nl.martenm.servertutorialplus.points.IPlayPoint;
@@ -53,11 +53,11 @@ public class ClickBlockPoint extends ServerTutorialPoint {
     }
 
     @Override
-    public IPlayPoint createPlay(Player player, OldValuesPlayer oldValuesPlayer, IPointCallBack callBack) {
+    public IPlayPoint createPlay(Player player, PlayerData playerData, IPointCallBack callBack) {
         return new IPlayPoint(){
             @Override
             public void start() {
-                playDefault(player, oldValuesPlayer, teleport);
+                playDefault(player, playerData, teleport);
 
                 if(clickableBlock == null){
                     player.sendMessage(ChatColor.RED + ChatColor.BOLD.toString() + "SKIPPED: " + ChatColor.RED + "Point has not been setup! Use the command " + ChatColor.YELLOW + "/st editpoint <id> <point> setblock" + ChatColor.RED + " to set the clickable block!");

@@ -6,8 +6,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Config extends YamlConfiguration{
 
-    private JavaPlugin plugin;
-    private String fileName;
+    private final JavaPlugin plugin;
+    private final String fileName;
 
     public Config(JavaPlugin plugin, String fileName){
         this.plugin = plugin;

@@ -1,7 +1,7 @@
 package nl.martenm.servertutorialplus.points.custom;
 
 import nl.martenm.servertutorialplus.ServerTutorialPlus;
-import nl.martenm.servertutorialplus.helpers.dataholders.OldValuesPlayer;
+import nl.martenm.servertutorialplus.helpers.dataholders.PlayerData;
 import nl.martenm.servertutorialplus.points.IPlayPoint;
 import nl.martenm.servertutorialplus.points.IPointCallBack;
 import nl.martenm.servertutorialplus.points.PointType;
@@ -27,12 +27,12 @@ public class CommandPoint extends ServerTutorialPoint {
     }
 
     @Override
-    public IPlayPoint createPlay(Player player, OldValuesPlayer oldValuesPlayer, IPointCallBack callBack) {
+    public IPlayPoint createPlay(Player player, PlayerData playerData, IPointCallBack callBack) {
         return new IPlayPoint() {
             @Override
             public void start() {
                 waiting.put(player.getUniqueId(), callBack);
-                playDefault(player, oldValuesPlayer, true);
+                playDefault(player, playerData, true);
             }
 
             @Override

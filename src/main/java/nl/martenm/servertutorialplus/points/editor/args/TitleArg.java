@@ -34,7 +34,7 @@ public class TitleArg extends PointArg {
 
             case "title":
                 if (args.length < 2) {
-                    point.getTitleInfo().title = "";
+                    point.getTitleInfo().setTitle("");
                     return true;
                 }
 
@@ -43,12 +43,12 @@ public class TitleArg extends PointArg {
                 }
 
                 String message = StringUtils.join(args, ' ', 1, args.length);
-                point.getTitleInfo().title = message;
+                point.getTitleInfo().setTitle(message);
                 break;
 
             case "subtitle":
                 if (args.length < 2) {
-                    point.getTitleInfo().subtitle = "";
+                    point.getTitleInfo().setSubtitle("");
                     return true;
                 }
 
@@ -57,7 +57,7 @@ public class TitleArg extends PointArg {
                 }
 
                 message = StringUtils.join(args, ' ', 1, args.length);
-                point.getTitleInfo().subtitle = message;
+                point.getTitleInfo().setSubtitle(message);
                 break;
 
             case "fadein":
@@ -69,7 +69,7 @@ public class TitleArg extends PointArg {
                 }
 
                 if(args.length < 2){
-                    sender.sendMessage(Lang.TITLE_CURRENT.toString().replace("%type%", args[0]).replace("%ticks%", point.getTitleInfo().fadeIn + ""));
+                    sender.sendMessage(Lang.TITLE_CURRENT.toString().replace("%type%", args[0]).replace("%ticks%", point.getTitleInfo().getFadeIn() + ""));
                     return false;
                 }
 
@@ -84,7 +84,7 @@ public class TitleArg extends PointArg {
                     point.setTitleInfo(new PlayerTitle());
                 }
 
-                point.getTitleInfo().fadeIn = time;
+                point.getTitleInfo().setFadeIn(time);
                 break;
 
             case "fadeout":
@@ -94,7 +94,7 @@ public class TitleArg extends PointArg {
                 }
 
                 if(args.length < 2){
-                    sender.sendMessage(Lang.TITLE_CURRENT.toString().replace("%type%", args[0]).replace("%ticks%", point.getTitleInfo().fadeOut + ""));
+                    sender.sendMessage(Lang.TITLE_CURRENT.toString().replace("%type%", args[0]).replace("%ticks%", point.getTitleInfo().getFadeOut() + ""));
                     return false;
                 }
 
@@ -109,7 +109,7 @@ public class TitleArg extends PointArg {
                     point.setTitleInfo(new PlayerTitle());
                 }
 
-                point.getTitleInfo().fadeOut = time;
+                point.getTitleInfo().setFadeOut(time);
                 break;
 
             case "stay":
@@ -120,7 +120,7 @@ public class TitleArg extends PointArg {
                 }
 
                 if(args.length < 2){
-                    sender.sendMessage(Lang.TITLE_CURRENT.toString().replace("%type%", args[0]).replace("%ticks%", point.getTitleInfo().time + ""));
+                    sender.sendMessage(Lang.TITLE_CURRENT.toString().replace("%type%", args[0]).replace("%ticks%", point.getTitleInfo().getTime() + ""));
                     return false;
                 }
 
@@ -136,7 +136,7 @@ public class TitleArg extends PointArg {
                     point.setTitleInfo(new PlayerTitle());
                 }
 
-                point.getTitleInfo().time = time;
+                point.getTitleInfo().setTime(time);
                 break;
 
             default:
